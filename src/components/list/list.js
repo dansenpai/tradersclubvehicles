@@ -8,6 +8,7 @@ import {
   EmptyMessage,
 } from './list.styles.js';
 import { Link } from 'react-router-dom';
+import {formatCurrency, formatKm} from '../../utils/formatNumber';
 
 const List = props => {
   const {options, searching} = props;
@@ -24,11 +25,11 @@ const List = props => {
           <ListItem>
             <ItemLeft>
               <Bold>{option.title}</Bold>
-              <div>{option.model} • {option.brand} • {option.km} KM</div>
+              <div>{option.model} • {option.brand} • {formatKm(option.km)}</div>
             </ItemLeft>
 
             <ItemRight>
-              <Bold>{option.price}</Bold>
+              <Bold>{formatCurrency(option.price)}</Bold>
               <div>{option.year}</div>
             </ItemRight>
           </ListItem>
