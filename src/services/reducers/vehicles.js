@@ -2,6 +2,16 @@ const INITIAL_STATE = {
   vehicles: [],
   searching: false,
   filteredVehicles: [],
+  brands: [],
+  newVehicle: {
+    title: '',
+    model: '',
+    brand: '',
+    year: '',
+    color: '',
+    km: '',
+    price: '',
+  }
 };
 
 export const VehicleReducer = (state = INITIAL_STATE, action) => {
@@ -20,6 +30,24 @@ export const VehicleReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         filteredVehicles: action.payload.filteredVehicles
+      }
+    case 'SET_NEW_VEHICLE':
+      return {
+        ...state,
+        newVehicle: { 
+          ...state.newVehicle,
+          [action.payload.name]: action.payload.value,
+        }
+      }
+    case 'CLEAR_NEW_VEHICLE':
+      return {
+        ...state,
+        newVehicle: INITIAL_STATE.newVehicle
+      }
+    case 'GET_BRANDS':
+      return {
+        ...state,
+        brands: action.payload.brands,
       }
     default:
       return state;

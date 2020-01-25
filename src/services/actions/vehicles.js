@@ -38,3 +38,42 @@ export const setSearchingFalse = () => {
     }catch(erro) { console.log(erro) }
   }
 }
+
+export const setNewVehicle = (name, value) => {
+  return async dispatch => {
+    dispatch({type: 'SET_NEW_VEHICLE', payload: {name, value}});
+    
+    return true;
+  }
+}
+export const clearNewVehicle = () => {
+  return async dispatch => {
+    dispatch({type: 'CLEAR_NEW_VEHICLE'});
+
+    return true;
+  }
+}
+
+export const createNewVehicle = (vehicle) => {
+  return async dispatch => {
+    try{
+      await Api.createNewVehicle({car: vehicle});
+
+      dispatch(clearNewVehicle());
+
+      return true;
+    }catch(erro) { console.log(erro) }
+  }
+}
+
+export const getBrands = () => {
+  return async dispatch => {
+    try{
+      const brands = await Api.getBrands();
+
+      dispatch({type: 'GET_BRANDS', payload: {brands}});
+
+      return true;
+    }catch(erro) { console.log(erro) }
+  }
+}

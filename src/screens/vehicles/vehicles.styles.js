@@ -39,3 +39,11 @@ export const Row = styled.div`
 export const Column = styled.div`
   flex-basis: ${props => props.size || '100'}%;
 `;
+
+export const Snack = styled.div`
+  border: 1px solid #eee;
+  padding: 10px;
+  margin-bottom: 10px;
+  background: #fff;
+  border-radius: 3px;
+`;

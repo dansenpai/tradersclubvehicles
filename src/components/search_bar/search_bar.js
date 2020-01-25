@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {SearchBarWrapper, Input} from './search_bar.styles';
 import {Link} from 'react-router-dom';
 import Button from '../button/button';
@@ -13,11 +13,13 @@ import {
 
 const SearchBar = props => {
   const handleChange = async (e) => {
-    const {vehicles, actions} = props;
+    const {vehicles, searching, actions} = props;
     const text = e.target.value;
 
     actions.setSearchingTrue();
-    await props.actions.getVehicles(text);
+    if(!searching) {
+      await props.actions.getVehicles(text);
+    }
     
     if(text !== '' && text !== null) {
       const filtered = vehicles.filter((item) => {

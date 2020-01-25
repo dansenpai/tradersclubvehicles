@@ -11,7 +11,7 @@ const SelectInput = (props) => {
     <SelectInputWrapper name={name} onChange={onChange}>
       <Option value="">{placeholder}</Option>
       {options.map((option, index) => (
-        <Option key={index} value={option.value}>{option.label}</Option>
+        <Option key={index} value={option.name}>{option.name}</Option>
       ))}
     </SelectInputWrapper>
   )
