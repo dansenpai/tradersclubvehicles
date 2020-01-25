@@ -12,7 +12,12 @@ import SelectInput from '../../components/select_input/select_input';
 const renderField = (field, handleValue) => {
   if(field.type === 'select') {
     return (
-      <SelectInput name={field.name} onChange={handleValue} options={field.options} />
+      <SelectInput
+        placeholder={field.placeholder}
+        name={field.name}
+        onChange={handleValue}
+        options={field.options}
+      />
     )
   }
 
