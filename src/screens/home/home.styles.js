@@ -10,7 +10,7 @@ export const ContentWrapper = styled.div`
 
 export const HomeTitle = styled.div`
   text-align: right;
-  font-size: 130px;
+  font-size: 100px;
   margin-top: 80px;
   font-family: 'Lobster two', cursive;
   color: #fff;

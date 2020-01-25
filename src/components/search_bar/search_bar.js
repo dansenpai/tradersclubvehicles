@@ -4,22 +4,32 @@ import {Link} from 'react-router-dom';
 import Button from '../button/button';
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
-import {getVehicles} from '../../services/actions/vehicles';
+import {
+  getVehicles, 
+  setFilteredVehicles, 
+  setSearchingFalse, 
+  setSearchingTrue
+} from '../../services/actions/vehicles';
 
 const SearchBar = props => {
-  useEffect(() => {
-    async function init() {
-      await props.actions.getVehicles();
-    }
-    
-    console.log(props);
-    init();
-  }, []);
-
   const handleChange = async (e) => {
-    console.log(e.target.value);
-    const vehicles = await props.actions.getVehicles(e.target.value);
-    console.log(vehicles);
+    const {vehicles, actions} = props;
+    const text = e.target.value;
+
+    actions.setSearchingTrue();
+    await props.actions.getVehicles(text);
+    
+    if(text !== '' && text !== null) {
+      const filtered = vehicles.filter((item) => {
+        return (item.title.toLowerCase().indexOf(text.toLowerCase()) > -1);
+      })
+
+      actions.setFilteredVehicles(filtered);
+    } else {
+        actions.setSearchingFalse();
+        actions.setFilteredVehicles([]);
+    }
+
   }
 
   return(
@@ -32,7 +42,12 @@ const SearchBar = props => {
   )
 }
 
-const actionCreators = {getVehicles};
+const actionCreators = {
+  getVehicles,
+  setFilteredVehicles,
+  setSearchingFalse,
+  setSearchingTrue
+};
 
 const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(actionCreators, dispatch),
@@ -44,6 +59,7 @@ function mapStateToProps(state) {
   return {
     vehicles: VehicleReducer.vehicles,
     searching: VehicleReducer.searching,
+    filteredVehicles: VehicleReducer.filteredVehicles
   }
 }
 

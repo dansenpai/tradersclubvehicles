@@ -1,6 +1,7 @@
 const INITIAL_STATE = {
   vehicles: [],
   searching: false,
+  filteredVehicles: [],
 };
 
 export const VehicleReducer = (state = INITIAL_STATE, action) => {
@@ -14,6 +15,11 @@ export const VehicleReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         searching: action.payload.searching
+      }
+    case 'SET_FILTERED_VEHICLES':
+      return {
+        ...state,
+        filteredVehicles: action.payload.filteredVehicles
       }
     default:
       return state;

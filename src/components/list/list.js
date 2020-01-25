@@ -1,15 +1,25 @@
 import React from 'react';
-import {ListWrapper, ListItem, Bold, ItemLeft, ItemRight} from './list.styles.js';
+import {
+  ListWrapper,
+  ListItem,
+  Bold,
+  ItemLeft,
+  ItemRight,
+  EmptyMessage,
+} from './list.styles.js';
 
 const List = props => {
-  const {options} = props;
+  const {options, searching} = props;
+  if(!Array.isArray(options)) return null;
 
-  if(!options.length) return null;
+  const empty = searching && options.length === 0;
   
   return(
     <ListWrapper>
-      {options.map(option => (
-        <ListItem>
+      {empty && <EmptyMessage>Nenhum resultado para sua busca</EmptyMessage>}
+
+      {options.map((option, index) => (
+        <ListItem key={index}>
           <ItemLeft>
             <Bold>{option.title}</Bold>
             <div>{option.subtitle}</div>
