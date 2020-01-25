@@ -24,11 +24,11 @@ const List = props => {
           <ListItem>
             <ItemLeft>
               <Bold>{option.title}</Bold>
-              <div>{option.subtitle}</div>
+              <div>{option.model} • {option.brand} • {option.km} KM</div>
             </ItemLeft>
 
             <ItemRight>
-              <Bold>{option.value}</Bold>
+              <Bold>{option.price}</Bold>
               <div>{option.year}</div>
             </ItemRight>
           </ListItem>

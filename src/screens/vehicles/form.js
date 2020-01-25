@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Input, 
   ActionsWrapper, 
@@ -17,7 +17,9 @@ import {
   getBrands, 
   createNewVehicle,
   getVehicles,
-  removeVehicle
+  removeVehicle,
+  setFilteredVehicles,
+  setSearchingFalse
 } from '../../services/actions/vehicles';
 
 const emptyVehicle = {
@@ -35,17 +37,23 @@ const Form = props => {
   const action = id ? 'EDIT' : 'CREATE';
   const [message, setMessage] = useState(null);
   const [editingVehicle, setEditingVehicle] = useState(emptyVehicle);
-  const {searching, filteredVehicles, actions, brands} = props;
+  const {searching, filteredVehicles, actions, brands, vehicles} = props;
 
   useEffect(() => {
     async function init() {
-      await props.actions.getBrands();
-      const vehicles = await props.actions.getVehicles();
+      actions.getBrands();
+      if(vehicles.length == 0) {
+        await actions.getVehicles();
+      }
+
+      actions.setFilteredVehicles([]);
+      actions.setSearchingFalse();
+      
       if(vehicles && action === 'EDIT'){
         const vehicle  = vehicles.filter(car => {
-          return car.id == id;
+          return car.id.toString() === id;
         })
-
+        
         setEditingVehicle(vehicle[0]);
       }
     }
@@ -170,7 +178,9 @@ const actionCreators = {
   getBrands,
   createNewVehicle,
   getVehicles,
-  removeVehicle
+  removeVehicle,
+  setFilteredVehicles,
+  setSearchingFalse,
 };
 
 const mapDispatchToProps = (dispatch) => ({
@@ -184,6 +194,7 @@ function mapStateToProps(state) {
     searching: VehicleReducer.searching,
     filteredVehicles: VehicleReducer.filteredVehicles,
     brands: VehicleReducer.brands,
+    vehicles: VehicleReducer.vehicles,
   }
 }
 

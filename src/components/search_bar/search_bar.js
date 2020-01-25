@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {SearchBarWrapper, Input} from './search_bar.styles';
 import {Link} from 'react-router-dom';
 import Button from '../button/button';
@@ -12,31 +12,41 @@ import {
 } from '../../services/actions/vehicles';
 
 const SearchBar = props => {
-  const handleChange = async (e) => {
-    const {vehicles, searching, actions} = props;
-    const text = e.target.value;
+  const [text, setText] = useState('');
 
-    actions.setSearchingTrue();
-    if(!searching) {
-      await props.actions.getVehicles(text);
+  useEffect(() => {
+    async function init() {
+      if(!props.searching && props.filteredVehicles.length < 1) {
+        props.actions.getVehicles(text);
+        setText('');
+      }
     }
-    
+
+    init();
+  }, [props.searching])
+
+  const handleChange = async (e) => {
+    const {vehicles, actions} = props;
+    const text = e.target.value;
+    setText(text);
+
     if(text !== '' && text !== null) {
       const filtered = vehicles.filter((item) => {
         return (item.title.toLowerCase().indexOf(text.toLowerCase()) > -1);
       })
 
       actions.setFilteredVehicles(filtered);
+      actions.setSearchingTrue();
     } else {
-        actions.setSearchingFalse();
-        actions.setFilteredVehicles([]);
+      actions.setSearchingFalse();
+      actions.setFilteredVehicles([]);
     }
 
   }
 
   return(
     <SearchBarWrapper>
-      <Input onChange={handleChange} placeholder="Pesquise por um veículo" />
+      <Input value={text} onChange={(e) => handleChange(e)} placeholder="Pesquise por um veículo" />
       <Link to="/vehicle-register">
         <Button>Cadastrar</Button>
       </Link>
