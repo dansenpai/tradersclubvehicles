@@ -15,11 +15,13 @@ a {
 }
 
 .main-content {
+  background: url('../src/assets/images/car-wireframe.png');
   margin-left: 500px;
   height: 100vh;
   background-repeat: no-repeat;
-  background-position: right 35% bottom 45%;
+  background-position: right 0% bottom 45%;
   background-attachment: fixed;
+  background-size: auto 60%;
 }
 
 ::placeholder {

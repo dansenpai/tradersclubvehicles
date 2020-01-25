@@ -42,7 +42,7 @@ const Form = props => {
   useEffect(() => {
     async function init() {
       actions.getBrands();
-      if(vehicles.length == 0) {
+      if(vehicles.length === 0) {
         await actions.getVehicles();
       }
 

@@ -1,5 +1,3 @@
-import numeral from 'numeral';
-
 export const formatCurrency = (value) => {
   const f = value
   .toFixed(2)
