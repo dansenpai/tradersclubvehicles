@@ -7,7 +7,7 @@ export const getVehicles = (q = '') => {
 
       dispatch({type: 'SET_VEHICLES', payload: {vehicles}});
       return vehicles;
-    }catch(erro) { console.log(erro) }
+    }catch(erro) { throw erro }
   }
 }
 
@@ -15,7 +15,7 @@ export const setFilteredVehicles = (filteredVehicles) => {
   return async dispatch => {
     try {
       dispatch({type: 'SET_FILTERED_VEHICLES', payload: {filteredVehicles}})
-    }catch(erro) {console.log(erro)}
+    }catch(erro) {throw erro}
   }
 }
 
@@ -25,7 +25,7 @@ export const setSearchingTrue = () => {
       dispatch({type: 'SET_SEARCHING', payload: {searching: true}});
 
       return true;
-    }catch(erro) { console.log(erro) }
+    }catch(erro) { throw erro }
   }
 }
 
@@ -35,7 +35,7 @@ export const setSearchingFalse = () => {
       dispatch({type: 'SET_SEARCHING', payload: {searching: false}});
 
       return true;
-    }catch(erro) { console.log(erro) }
+    }catch(erro) { throw erro }
   }
 }
 
@@ -46,7 +46,7 @@ export const createNewVehicle = (vehicle, action) => {
       if(action === 'CREATE') return await Api.createNewVehicle({car: vehicle});
 
       return await Api.editVehicle({car: vehicle});
-    }catch(erro) { console.log(erro) }
+    }catch(erro) { throw erro }
   }
 }
 
@@ -54,7 +54,7 @@ export const removeVehicle = (id) => {
   return async dispatch => {
     try{
       return await Api.removeVehicle(id);
-    }catch(erro) { console.log(erro) }
+    }catch(erro) { throw erro }
   }
 }
 
@@ -66,6 +66,6 @@ export const getBrands = () => {
       dispatch({type: 'GET_BRANDS', payload: {brands}});
 
       return true;
-    }catch(erro) { console.log(erro) }
+    }catch(erro) { throw erro }
   }
 }

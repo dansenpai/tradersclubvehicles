@@ -5,8 +5,6 @@ import PropTypes from 'prop-types';
 const SelectInput = (props) => {
   const {options, placeholder, name, onChange, selected} = props;
   if(!options.length) return null;
-  console.log(selected);
-  
   return(
     <SelectInputWrapper
       name={name} 
