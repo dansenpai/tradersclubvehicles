@@ -11,9 +11,13 @@ export const ContentWrapper = styled.div`
 export const HomeTitle = styled.div`
   text-align: right;
   font-size: 130px;
-  margin-top: 40px;
+  margin-top: 80px;
   font-family: 'Lobster two', cursive;
   color: #fff;
+
+  @media (max-width: 1024px) {
+    font-size: 40px;
+  }
 `;
   
 export const RightText = styled.div``;
