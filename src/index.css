@@ -10,6 +10,10 @@ body, html{
   width: 100%;
 }
 
+a {
+  text-decoration: none;
+}
+
 .main-content {
   margin-left: 500px;
   height: 100vh;

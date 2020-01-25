@@ -11,18 +11,26 @@ import Button from '../../components/button/button';
 import SelectInput from '../../components/select_input/select_input';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import {useParams} from 'react-router-dom';
 import List from '../../components/list/list';
 import {
-  setNewVehicle, 
-  clearNewVehicle, 
   getBrands, 
   createNewVehicle,
 } from '../../services/actions/vehicles';
 
+const emptyVehicle = {
+  title: '',
+  model: '',
+  brand: '',
+  year: '',
+  color: '',
+  km: '',
+  price: '',
+}
+
 const Form = props => {
   useEffect(() => {
     async function init() {
-      props.actions.clearNewVehicle();
       await props.actions.getBrands();
     }
 
@@ -30,7 +38,9 @@ const Form = props => {
   }, []);
 
   const [message, setMessage] = useState(null);
-  const {searching, filteredVehicles, actions, brands, newVehicle} = props;
+  const [editingVehicle, setEditingVehicle] = useState(emptyVehicle);
+  const {searching, filteredVehicles, actions, brands} = props;
+  const {id} = useParams;
 
   const renderField = (field, handleValue) => {
     if(field.type === 'select') {
@@ -40,7 +50,7 @@ const Form = props => {
           name={field.name}
           onChange={handleValue}
           options={field.options}
-          value={newVehicle[field.name]}
+          value={editingVehicle[field.name]}
         />
       )
     }
@@ -51,18 +61,26 @@ const Form = props => {
         onChange={handleValue}
         placeholder={field.placeholder}
         type={field.type}
-        value={newVehicle[field.name]}
+        value={editingVehicle[field.name]}
       />
     )
   }
 
   const handleValue = (e) => {
-    actions.setNewVehicle(e.target.name, e.target.value);
+    const newValue = {[e.target.name]: e.target.value};
+
+    setEditingVehicle(prevState => {
+      return {
+        ...prevState,
+        ...newValue,
+      }
+    });
   }
 
   const handleSubmit = async () => {
     // TODO validate field types;
-    await actions.createNewVehicle(newVehicle);
+    await actions.createNewVehicle(editingVehicle);
+    setEditingVehicle(emptyVehicle);
 
     // TODO validate errors;
     setMessage('Veículo cadastrado com sucesso!');
@@ -118,8 +136,6 @@ const Form = props => {
 }
 
 const actionCreators = {
-  setNewVehicle,
-  clearNewVehicle,
   getBrands,
   createNewVehicle,
 };
@@ -134,7 +150,6 @@ function mapStateToProps(state) {
   return {
     searching: VehicleReducer.searching,
     filteredVehicles: VehicleReducer.filteredVehicles,
-    newVehicle: VehicleReducer.newVehicle,
     brands: VehicleReducer.brands
   }
 }

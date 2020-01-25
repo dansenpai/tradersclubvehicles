@@ -6,7 +6,6 @@ const VehicleEdit = () => {
 
   return(
     <VehicleWrapper>
-      Editar veículo
       <Form />
     </VehicleWrapper>
   )

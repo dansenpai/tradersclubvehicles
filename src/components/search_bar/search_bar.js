@@ -37,7 +37,7 @@ const SearchBar = props => {
   return(
     <SearchBarWrapper>
       <Input onChange={handleChange} placeholder="Pesquise por um veículo" />
-      <Link to="vehicle-register">
+      <Link to="/vehicle-register">
         <Button>Cadastrar</Button>
       </Link>
     </SearchBarWrapper>

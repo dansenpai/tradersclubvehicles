@@ -1,6 +1,6 @@
 import Api from '../api';
 
-export const getVehicles = (q) => {
+export const getVehicles = (q = '') => {
   return async dispatch => {
     try{
       const vehicles = await Api.getVehicles(q);
@@ -39,27 +39,10 @@ export const setSearchingFalse = () => {
   }
 }
 
-export const setNewVehicle = (name, value) => {
-  return async dispatch => {
-    dispatch({type: 'SET_NEW_VEHICLE', payload: {name, value}});
-    
-    return true;
-  }
-}
-export const clearNewVehicle = () => {
-  return async dispatch => {
-    dispatch({type: 'CLEAR_NEW_VEHICLE'});
-
-    return true;
-  }
-}
-
 export const createNewVehicle = (vehicle) => {
   return async dispatch => {
     try{
       await Api.createNewVehicle({car: vehicle});
-
-      dispatch(clearNewVehicle());
 
       return true;
     }catch(erro) { console.log(erro) }
