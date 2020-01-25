@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {
   Input, 
   ActionsWrapper, 
@@ -11,11 +11,13 @@ import Button from '../../components/button/button';
 import SelectInput from '../../components/select_input/select_input';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import {useParams} from 'react-router-dom';
+import {useParams, Link} from 'react-router-dom';
 import List from '../../components/list/list';
 import {
   getBrands, 
   createNewVehicle,
+  getVehicles,
+  removeVehicle
 } from '../../services/actions/vehicles';
 
 const emptyVehicle = {
@@ -29,18 +31,27 @@ const emptyVehicle = {
 }
 
 const Form = props => {
-  useEffect(() => {
-    async function init() {
-      await props.actions.getBrands();
-    }
-
-    init();
-  }, []);
-
+  const {id} = useParams();
+  const action = id ? 'EDIT' : 'CREATE';
   const [message, setMessage] = useState(null);
   const [editingVehicle, setEditingVehicle] = useState(emptyVehicle);
   const {searching, filteredVehicles, actions, brands} = props;
-  const {id} = useParams;
+
+  useEffect(() => {
+    async function init() {
+      await props.actions.getBrands();
+      const vehicles = await props.actions.getVehicles();
+      if(vehicles && action === 'EDIT'){
+        const vehicle  = vehicles.filter(car => {
+          return car.id == id;
+        })
+
+        setEditingVehicle(vehicle[0]);
+      }
+    }
+
+    init()
+  }, [id]);
 
   const renderField = (field, handleValue) => {
     if(field.type === 'select') {
@@ -49,12 +60,13 @@ const Form = props => {
           placeholder={field.placeholder}
           name={field.name}
           onChange={handleValue}
+          selected={editingVehicle[field.name]}
           options={field.options}
           value={editingVehicle[field.name]}
         />
       )
     }
-  
+
     return(
       <Input
         name={field.name}
@@ -79,12 +91,27 @@ const Form = props => {
 
   const handleSubmit = async () => {
     // TODO validate field types;
-    await actions.createNewVehicle(editingVehicle);
-    setEditingVehicle(emptyVehicle);
+    await actions.createNewVehicle(editingVehicle, action);
+    action === 'CREATE' && setEditingVehicle(emptyVehicle);
 
     // TODO validate errors;
-    setMessage('Veículo cadastrado com sucesso!');
+    setMessage(`Veículo ${action === 'EDIT' ? 'editado' : 'cadastrado'} com sucesso!`);
+    clearMessage();
+  }
 
+  const removeVehicle = async () => {
+    // TODO change for awesome alerts or other;
+    const remove = window.confirm('Deseja remover este cadastro?');
+
+    if(remove) {
+      await actions.removeVehicle(id);
+      setEditingVehicle(emptyVehicle);
+      setMessage(`Veículo deletado com sucesso!`);
+      clearMessage();
+    }
+  }
+
+  const clearMessage = () => {
     setTimeout(() => {
       setMessage(null);
     }, 3000)
@@ -120,8 +147,12 @@ const Form = props => {
 
           <ActionsWrapper>
             <ActionsLeft>
-              <Button type="TRANSPARENT">Remover</Button>
-              <Button type="TRANSPARENT">Cancelar</Button>
+              {action === 'EDIT' && (
+                <Button type="TRANSPARENT" onClick={removeVehicle}>Remover</Button>
+              )}
+              <Link to="/">
+                <Button type="TRANSPARENT">Cancelar</Button>
+              </Link>
             </ActionsLeft>
             <Button onClick={handleSubmit}>Salvar</Button>
           </ActionsWrapper>
@@ -138,6 +169,8 @@ const Form = props => {
 const actionCreators = {
   getBrands,
   createNewVehicle,
+  getVehicles,
+  removeVehicle
 };
 
 const mapDispatchToProps = (dispatch) => ({
@@ -150,7 +183,7 @@ function mapStateToProps(state) {
   return {
     searching: VehicleReducer.searching,
     filteredVehicles: VehicleReducer.filteredVehicles,
-    brands: VehicleReducer.brands
+    brands: VehicleReducer.brands,
   }
 }
 

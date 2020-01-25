@@ -39,12 +39,21 @@ export const setSearchingFalse = () => {
   }
 }
 
-export const createNewVehicle = (vehicle) => {
+export const createNewVehicle = (vehicle, action) => {
   return async dispatch => {
     try{
-      await Api.createNewVehicle({car: vehicle});
 
-      return true;
+      if(action === 'CREATE') return await Api.createNewVehicle({car: vehicle});
+
+      return await Api.editVehicle({car: vehicle});
+    }catch(erro) { console.log(erro) }
+  }
+}
+
+export const removeVehicle = (id) => {
+  return async dispatch => {
+    try{
+      return await Api.removeVehicle(id);
     }catch(erro) { console.log(erro) }
   }
 }

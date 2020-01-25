@@ -5,12 +5,13 @@ import PropTypes from 'prop-types';
 const SelectInput = (props) => {
   const {options, placeholder, name, onChange, selected} = props;
   if(!options.length) return null;
+  console.log(selected);
   
   return(
     <SelectInputWrapper
       name={name} 
       onChange={onChange}
-      defaultValue={selected}
+      value={selected}
     >
       <Option value="">{placeholder}</Option>
       {options.map((option, index) => (

@@ -29,6 +29,24 @@ export default {
     } catch (e) {
       throw e;
     }
+  },
+  editVehicle: async (data) => {
+    try {
+      const response = await axios.put(`${URL_BASE}/cars/${data.car.id}`, data);
+
+      return response;
+    } catch (e) {
+      throw e;
+    }
+  },
+  removeVehicle: async (id) => {
+    try {
+      const response = await axios.delete(`${URL_BASE}/cars/${id}`);
+
+      return response;
+    } catch (e) {
+      throw e;
+    }
   }
 }
 
